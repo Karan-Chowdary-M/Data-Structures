@@ -1,0 +1,38 @@
+Rotate 1D array 
+---------------------------------------------------------------
+#include <stdio.h>
+
+void rotateArray(int arr[], int length, int shift) {
+    int temp[length];
+    for (int i = 0; i < length; i++) {
+        temp[i] = arr[i];
+    }
+    for (int i = 0; i < length; i++) {
+        arr[(i + shift) % length] = temp[i];
+    }
+}
+
+int main() {
+    int length;
+    printf("Enter the length of the array: ");
+    scanf("%d", &length);
+
+    int arr[length];
+    printf("Enter the elements of the array: ");
+    for (int i = 0; i < length; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int shift;
+    printf("Enter the number of positions to rotate to the right: ");
+    scanf("%d", &shift);
+
+    rotateArray(arr, length, shift);
+
+    printf("Rotated array: ");
+    for (int i = 0; i < length; i++) {
+        printf("%d ", arr[i]);
+    }
+    
+    return 0;
+}
