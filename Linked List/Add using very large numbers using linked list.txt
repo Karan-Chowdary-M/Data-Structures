@@ -1,0 +1,80 @@
+Add using very large numbers using linked list
+------------------------------------------------------------------------
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+Node* createNode(int digit) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = digit;
+    newNode->next = NULL;
+    return newNode;
+}
+
+Node* addNumbers(Node* num1, Node* num2) {
+    Node* result = NULL;
+    Node* current = NULL;
+    int carry = 0;
+
+    while (num1 || num2 || carry) {
+        int sum = carry;
+
+        if (num1) {
+            sum += num1->data;
+            num1 = num1->next;
+        }
+
+        if (num2) {
+            sum += num2->data;
+            num2 = num2->next;
+        }
+
+        carry = sum / 10;
+        sum %= 10;
+
+        Node* newNode = createNode(sum);
+
+        if (result == NULL) {
+            result = newNode;
+            current = result;
+        } else {
+            current->next = newNode;
+            current = newNode;
+        }
+    }
+
+    return result;
+}
+
+void printList(Node* head) {
+    while (head) {
+        printf("%d", head->data);
+        head = head->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    Node* num1 = createNode(9);
+    num1->next = createNode(9);
+    num1->next->next = createNode(9);
+
+    Node* num2 = createNode(1);
+    num2->next = createNode(0);
+    num2->next->next = createNode(0);
+
+    Node* result = addNumbers(num1, num2);
+
+    printf("Result: ");
+    printList(result);
+
+    free(num1);
+    free(num2);
+    free(result);
+
+    return 0;
+}

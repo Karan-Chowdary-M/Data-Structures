@@ -1,0 +1,107 @@
+Multiplication of two polynomials using linked list with user input without comments
+-------------------------------------------------------------
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int coefficient;
+    int exponent;
+    struct Node* next;
+} Node;
+
+Node* createNode(int coef, int exp) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->coefficient = coef;
+    newNode->exponent = exp;
+    newNode->next = NULL;
+    return newNode;
+}
+
+Node* multiplyPolynomials(Node* poly1, Node* poly2) {
+    Node* result = NULL;
+    Node* current = NULL;
+
+    while (poly1) {
+        Node* temp = poly2;
+        while (temp) {
+            int coef = poly1->coefficient * temp->coefficient;
+            int exp = poly1->exponent + temp->exponent;
+            Node* newNode = createNode(coef, exp);
+
+            if (result == NULL) {
+                result = newNode;
+                current = result;
+            } else {
+                current->next = newNode;
+                current = newNode;
+            }
+            temp = temp->next;
+        }
+        poly1 = poly1->next;
+    }
+
+    return result;
+}
+
+void printPolynomial(Node* poly) {
+    while (poly) {
+        printf("%dx^%d", poly->coefficient, poly->exponent);
+        poly = poly->next;
+        if (poly) {
+            printf(" + ");
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    Node* poly1 = NULL;
+    Node* poly2 = NULL;
+    int coef, exp;
+
+    printf("Enter the coefficients and exponents of the first polynomial (enter 0 0 to finish):\n");
+    while (1) {
+        scanf("%d%d", &coef, &exp);
+        if (coef == 0 && exp == 0) {
+            break;
+        }
+        Node* newNode = createNode(coef, exp);
+        newNode->next = poly1;
+        poly1 = newNode;
+    }
+
+    printf("Enter the coefficients and exponents of the second polynomial (enter 0 0 to finish):\n");
+    while (1) {
+        scanf("%d%d", &coef, &exp);
+        if (coef == 0 && exp == 0) {
+            break;
+        }
+        Node* newNode = createNode(coef, exp);
+        newNode->next = poly2;
+        poly2 = newNode;
+    }
+
+    Node* result = multiplyPolynomials(poly1, poly2);
+
+    printf("Resultant polynomial: ");
+    printPolynomial(result);
+
+    // Free memory
+    while (poly1) {
+        Node* temp = poly1;
+        poly1 = poly1->next;
+        free(temp);
+    }
+    while (poly2) {
+        Node* temp = poly2;
+        poly2 = poly2->next;
+        free(temp);
+    }
+    while (result) {
+        Node* temp = result;
+        result = result->next;
+        free(temp);
+    }
+
+    return 0;
+}
